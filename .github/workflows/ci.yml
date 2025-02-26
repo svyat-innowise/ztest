@@ -14,9 +14,11 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
+        with:
+          path: /home/ubuntu/workspace
 
       - name: Check path to repo
-        run: ls /home/ubuntu/workspace/
+        run: ls
 
       - name: West init
         run: west init --local ./ztest
