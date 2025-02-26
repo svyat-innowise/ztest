@@ -39,10 +39,14 @@ jobs:
 
       - name: West update
         run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
           cd /home/ubuntu/workspace/ztest
           west update
 
       - name: West build
         run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
           cd /home/ubuntu/workspace/ztest/zft_board_app
           west build
