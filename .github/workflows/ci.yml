@@ -14,17 +14,28 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
-        with:
-          path: /home/ubuntu/workspace
 
-      - name: Check path to repo
-        run: ls
+      - name: Check current user
+        run: |
+          whoami
+          echo "Home directory: $HOME"
+          echo "Current user info:"
+          id
+          
+      - name: Check path to repo before
+        run: ls /__w/ztest/ztest/
+        
+      - name: Move repo to home ubuntu dir
+        run: mv /__w/ztest/ztest/ztest /home/ubuntu/workspace
+
+      - name: Check path to repo after
+        run: ls /home/ubuntu/workspace
 
       - name: West init
-        run: west init --local ./ztest
+        run: cd /home/ubuntu/workspace && west init --local ./ztest
 
       - name: West update
-        run: cd ./ztest && west update
+        run: cd /home/ubuntu/workspace/ztest && west update
 
       - name: West build
-        run: cd ./ztest/zft_board_app && west build
+        run: cd /home/ubuntu/workspace/ztest/zft_board_app && west build
