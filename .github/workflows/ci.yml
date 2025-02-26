@@ -34,7 +34,7 @@ jobs:
       - name: binding tolchain
         run: |
           cd /home/ubuntu/zephyr-sdk-0.17.0
-          ./setup.sh
+          yes | ./setup.sh
 
       - name: West init
         run: |
