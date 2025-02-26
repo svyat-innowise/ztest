@@ -14,22 +14,9 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
-
-      - name: Check current user
-        run: |
-          whoami
-          echo "Home directory: $HOME"
-          echo "Current user info:"
-          id
-          
-      - name: Check path to repo before
-        run: ls /__w/ztest/ztest/
         
       - name: Move repo to home ubuntu dir
         run: cp -r /__w/ztest/ztest /home/ubuntu/workspace
-
-      - name: Check path to repo after
-        run: ls /home/ubuntu/workspace
 
       - name: binding tolchain
         run: |
