@@ -32,10 +32,17 @@ jobs:
         run: ls /home/ubuntu/workspace
 
       - name: West init
-        run: cd /home/ubuntu/workspace && west init --local ./ztest
+        run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
+          west init --local ./ztest
 
       - name: West update
-        run: cd /home/ubuntu/workspace/ztest && west update
+        run: |
+          cd /home/ubuntu/workspace/ztest
+          west update
 
       - name: West build
-        run: cd /home/ubuntu/workspace/ztest/zft_board_app && west build
+        run: |
+          cd /home/ubuntu/workspace/ztest/zft_board_app
+          west build
