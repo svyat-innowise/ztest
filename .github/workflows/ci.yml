@@ -16,13 +16,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check path to repo
-      - run: ls home/ubuntu/workspace/ 
+        run: ls /home/ubuntu/workspace/
 
       - name: West init
-      - run: west init --local ./ztest
+        run: west init --local ./ztest
 
       - name: West update
-      - run: cd ./ztest && west update
+        run: cd ./ztest && west update
 
       - name: West build
-      - run: cd ./ztest/zft_board_app && west build
+        run: cd ./ztest/zft_board_app && west build
