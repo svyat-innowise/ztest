@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build_and_static_analysis:
+    runs-on: ubuntu-latest
+    container: 
+      image: svyatinnowise/esp32c3_supermini-zephyr-v4.0.0
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Check path to repo
+      - run: ls home/ubuntu/workspace/ 
+
+      - name: West init
+      - run: west init --local ./ztest
+
+      - name: West update
+      - run: cd ./ztest && west update
+
+      - name: West build
+      - run: cd ./ztest/zft_board_app && west build
