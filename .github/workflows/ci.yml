@@ -44,4 +44,4 @@ jobs:
           west build
 
       - name: CPP check
-        run: cppcheck /home/ubuntu/workspace/ztest/zft_board_app --enable=all --inconclusive --quiet --max-configs=1 
+        run: cppcheck /home/ubuntu/workspace/ztest/zft_board_app/src --enable=all --inconclusive --quiet --max-configs=1 
