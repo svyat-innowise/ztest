@@ -42,3 +42,6 @@ jobs:
           . ./.venv/bin/activate
           cd /home/ubuntu/workspace/ztest/zft_board_app
           west build
+
+      - name: CPP check
+        run: cppcheck /home/ubuntu/workspace/ztest/zft_board_app --enable=all --inconclusive --quiet --max-configs=1 
