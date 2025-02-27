@@ -15,24 +15,29 @@ RUN apt install -y git cmake ninja-build gperf \
 # But put in root group since GitHub actions needs permissions
 # to create tmp files.
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo \
-    -u 1001 ubuntu
+    -u 1001 ubuntu \
+    && mkdir /home/ubuntu/workspace \
+    && chown -R ubuntu:root /home/ubuntu/workspace \
+    && chmod -R 775 /home/ubuntu/workspace
 
-RUN mkdir /home/ubuntu/workspace \
-    && cd /home/ubuntu/workspace \
+USER ubuntu
+
+
+RUN cd /home/ubuntu/workspace \
     && mkdir temp_manifest_dir \
     && python3 -m venv ./.venv \
     && . ./.venv/bin/activate \
     && pip install west \
-    && echo ". /home/ubuntu/workspace/.venv/bin/activate" >> /home/ubuntu/workspace/.bashrc
+    && echo '. /home/ubuntu/workspace/.venv/bin/activate' >> /home/ubuntu/.bashrc
 
 # Install Zephyr RTOS SDK
-RUN cd ~ \
+RUN cd /home/ubuntu \
     && wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64.tar.xz \
     && wget -O - https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/sha256.sum | shasum --check --ignore-missing \
     && tar xvf zephyr-sdk-0.17.0_linux-x86_64.tar.xz \
     && cd zephyr-sdk-0.17.0 
 
-RUN cd ~/zephyr-sdk-0.17.0 \
+RUN cd /home/ubuntu/zephyr-sdk-0.17.0 \
     && yes | ./setup.sh
 
 # Copy manifest file to the temp directory (Manifest file of the CURRENT project)
@@ -47,7 +52,9 @@ RUN cd /home/ubuntu/workspace && . ./.venv/bin/activate \
     && west zephyr-export \
     && west packages pip --install
 
-RUN cd /home/ubuntu/workspace/ && rm -rf ./temp_manifest_dir || true
+RUN cd /home/ubuntu/workspace/ && rm -rf ./temp_manifest_dir || true \
+    && rm -rf ./.west
 
-USER ubuntu
 WORKDIR /home/ubuntu/workspace
+
+CMD ["/bin/bash"]

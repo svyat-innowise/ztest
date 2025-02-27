@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build_and_static_analysis:
+    runs-on: ubuntu-latest
+    container: 
+      image: svyatinnowise/esp32c3_supermini-zephyr-v4.0.0
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        
+      - name: Move repo to home ubuntu dir
+        run: cp -r /__w/ztest/ztest /home/ubuntu/workspace
+
+      - name: binding tolchain
+        run: |
+          cd /home/ubuntu/zephyr-sdk-0.17.0
+          yes | ./setup.sh
+
+      - name: West init
+        run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
+          west init --local ./ztest
+
+      - name: West update
+        run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
+          cd /home/ubuntu/workspace/ztest
+          west update
+
+      - name: Instaling code checker
+        run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
+          pip install codechecker
+      - name: West build with SCA
+      
+        run: |
+          cd /home/ubuntu/workspace
+          . ./.venv/bin/activate
+          cd /home/ubuntu/workspace/ztest/zft_board_app
+          west build -- -DZEPHYR_SCA_VARIANT=codechecker
